@@ -1,0 +1,44 @@
+[
+  {
+    "title": "FPS Booster",
+    "description": "Optimize game performance",
+    "category": "gaming",
+    "icon": "fa-gamepad"
+  },
+  {
+    "title": "Script Hub",
+    "description": "Run and manage scripts",
+    "category": "scripts",
+    "icon": "fa-code"
+  },
+  {
+    "title": "Dev Toolkit",
+    "description": "Developer utilities",
+    "category": "dev",
+    "icon": "fa-laptop-code"
+  },
+  {
+    "title": "AI Tools",
+    "description": "Automation & AI features",
+    "category": "ai",
+    "icon": "fa-robot"
+  },
+  {
+    "title": "Productivity Suite",
+    "description": "Boost your workflow",
+    "category": "productivity",
+    "icon": "fa-bolt"
+  },
+  {
+    "title": "Learning Hub",
+    "description": "Educational content",
+    "category": "education",
+    "icon": "fa-book"
+  },
+  {
+    "title": "Utility Tools",
+    "description": "General useful tools",
+    "category": "tools",
+    "icon": "fa-wrench"
+  }
+]
