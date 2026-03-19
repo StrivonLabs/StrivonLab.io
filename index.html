@@ -1,46 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Strivon Labs</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strivon Labs</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header>
-  <h1>Strivon Labs</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="ai.html">AI</a>
-    <a href="scripts.html">Scripts</a>
-  </nav>
-</header>
+    <header class="header">
+        <h1 class="logo">Strivon Labs</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a onclick="goAI()">AI</a>
+            <a onclick="goScripts()">Scripts</a>
+        </nav>
+    </header>
 
-<section class="hero">
-  <h2>Next-Gen Tools & AI</h2>
-  <p>Built by Yahia Mahmoud Ramy</p>
-</section>
+    <section class="hero">
+        <h2>Build Smarter. Faster. Better.</h2>
+        <p>The next-gen toolkit powered by local AI & advanced systems</p>
+        <button onclick="goAI()" class="hero-btn">Get Started</button>
+    </section>
 
-<section class="grid">
+    <section class="grid">
 
-  <div class="card">
-    <h3>AI Assistant</h3>
-    <p>Chat with a local AI (free)</p>
-    <button onclick="goAI()">Open</button>
-  </div>
+        <div class="card glow">
+            <h3>AI Assistant</h3>
+            <p>Local AI with zero cost</p>
+            <button onclick="goAI()">Launch</button>
+        </div>
 
-  <div class="card">
-    <h3>Script Hub</h3>
-    <p>Useful coding scripts</p>
-    <button onclick="goScripts()">Open</button>
-  </div>
+        <div class="card glow">
+            <h3>Script Hub</h3>
+            <p>Explore powerful scripts</p>
+            <button onclick="goScripts()">Open</button>
+        </div>
 
-</section>
+        <div class="card">
+            <h3>Code Generator</h3>
+            <p>Generate code instantly</p>
+            <button onclick="comingSoon()">Try</button>
+        </div>
 
-<footer>
-  <p>© 2026 Strivon Labs</p>
-</footer>
+        <div class="card">
+            <h3>System Tools</h3>
+            <p>Utilities & performance tools</p>
+            <button onclick="comingSoon()">Open</button>
+        </div>
 
-<script src="script.js"></script>
+        <div class="card">
+            <h3>Dev Panel</h3>
+            <p>Advanced controls</p>
+            <button onclick="comingSoon()">Access</button>
+        </div>
+
+        <div class="card">
+            <h3>Settings</h3>
+            <p>Customize your workspace</p>
+            <button onclick="comingSoon()">Edit</button>
+        </div>
+
+    </section>
+
+    <section class="features">
+        <h2>Why Strivon?</h2>
+        <div class="features-grid">
+            <div>⚡ Fast & Lightweight</div>
+            <div>🧠 AI Powered</div>
+            <div>🔒 Secure Systems</div>
+            <div>🎨 Clean UI</div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Strivon Labs — Built by Yahia Mahmoud Ramy</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
