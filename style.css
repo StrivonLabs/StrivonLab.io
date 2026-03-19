@@ -1,74 +1,14 @@
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0f172a;
-  color: white;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  background: #020617;
-}
-
-nav a {
-  margin: 0 10px;
-  color: white;
-  text-decoration: none;
-}
-
-.hero {
-  text-align: center;
-  padding: 100px;
-  background: linear-gradient(135deg, #1e3a8a, #9333ea);
-}
-
-.grid {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 40px;
-  flex-wrap: wrap;
-}
-
 .card {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 15px;
-  width: 220px;
-  text-align: center;
-  transition: 0.3s;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 15px;
+    width: 220px;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 0 20px rgba(99,102,241,0.2);
 }
 
-.card:hover {
-  transform: scale(1.05);
-}
-
-button {
-  margin-top: 10px;
-  padding: 10px;
-  border: none;
-  background: #6366f1;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#chat {
-  width: 60%;
-  margin: 20px auto;
-  height: 400px;
-  overflow-y: auto;
-  background: #020617;
-  padding: 10px;
-}
-
-.inputBox {
-  text-align: center;
-}
-
-input {
-  padding: 10px;
-  width: 60%;
-}
+    .card:hover {
+        transform: scale(1.07);
+        box-shadow: 0 0 30px rgba(99,102,241,0.5);
+    }

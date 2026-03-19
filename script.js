@@ -1,7 +1,11 @@
 function goAI() {
-  window.location.href = "ai.html";
+    window.location.href = "ai.html";
 }
 
 function goScripts() {
-  window.location.href = "scripts.html";
+    window.location.href = "scripts.html";
+}
+
+function comingSoon() {
+    alert("Coming soon...");
 }
