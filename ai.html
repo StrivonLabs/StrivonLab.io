@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Strivon AI</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Strivon AI</h1>
+
+<div id="chat"></div>
+
+<div class="inputBox">
+  <input id="input" placeholder="Ask something..." />
+  <button onclick="send()">Send</button>
+</div>
+
+<script>
+async function send() {
+  const input = document.getElementById("input");
+  const chat = document.getElementById("chat");
+
+  const msg = input.value;
+  if (!msg) return;
+
+  chat.innerHTML += `<div><b>You:</b> ${msg}</div>`;
+  input.value = "";
+
+  try {
+    const res = await fetch("http://localhost:11434/api/generate", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        model: "llama3",
+        prompt: msg,
+        stream: false
+      })
+    });
+
+    const data = await res.json();
+    chat.innerHTML += `<div><b>AI:</b> ${data.response}</div>`;
+  } catch {
+    chat.innerHTML += `<div>⚠️ AI not running (start Ollama)</div>`;
+  }
+}
+</script>
+
+</body>
+</html>
