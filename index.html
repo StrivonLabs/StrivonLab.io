@@ -4,189 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strivon Labs | Ultimate Gaming Hub</title>
-    <meta name="description" content="Advanced gaming tools, script hub, and performance optimization.">
+    <meta name="description" content="Premium performance boosters and educational scripting hub for gamers.">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-theme="dark">
 
 <header>
-    <div class="logo">
-        <div class="logo-dot"></div>
+    <a href="index.html" class="logo">
+        <div class="logo-img">S</div>
         <h1>STRIVON LABS</h1>
-    </div>
+    </a>
     <nav>
         <a href="index.html" class="active">Home</a>
         <a href="scripts.html">Script Hub</a>
         <a href="#downloads">Downloads</a>
-        <a href="scripts.html" class="nav-cta">Open Hub</a>
+        <div class="theme-controls">
+            <button class="control-btn" id="themeToggle" title="Toggle Light/Dark Mode">🌓</button>
+            <button class="control-btn" id="pickerToggle" title="Change Theme Colors">🎨</button>
+        </div>
     </nav>
 </header>
 
-<!-- HERO -->
+<!-- THEME PICKER PANEL -->
+<div class="theme-picker" id="themePicker">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <span style="font-weight:800; font-size:0.8rem;">THEME ACCENTS</span>
+        <button id="closePicker" style="background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
+    </div>
+    <div class="color-grid" id="colorGrid"></div>
+</div>
+
 <section class="hero">
-    <span class="hero-badge">⚡ v2.0 — Now Live</span>
-    <h2>Built for <span>Gamers.</span><br>Powered by Strivon.</h2>
-    <p>The most complete gaming toolkit — from performance optimization to elite script resources. All in one place.</p>
-    <div class="hero-buttons">
-        <a href="scripts.html" class="btn btn-primary">Browse Scripts</a>
-        <a href="#downloads" class="btn btn-ghost">Get Booster</a>
-    </div>
-</section>
-
-<!-- PERFORMANCE DASHBOARD -->
-<section class="dashboard">
-    <div class="section-header">
-        <span class="label">System Monitor</span>
-        <h3>Performance Dashboard</h3>
-        <p>Real-time stats and one-click optimization</p>
-    </div>
-
-    <div class="stats-grid">
-        <div class="stat-box">
-            <span class="stat-value" id="ramStat">—</span>
-            <span class="stat-label">RAM Free</span>
-            <div class="progress-wrap">
-                <div class="progress-label"><span>Usage</span><span id="ramPct">—</span></div>
-                <div class="progress-bar"><div class="progress-fill" id="ramBar" style="width:0%"></div></div>
+    <span class="hero-badge">Ver. 4.0 Alpha Now Live</span>
+    <h2>Optimize Your <span>Gameplay</span></h2>
+    <p>The ultimate performance ecosystem. Unlock your PC's potential and master game mechanics with our professional-grade tools.</p>
+    
+    <div class="dashboard">
+        <div class="stat-item">
+            <h4>Available RAM</h4>
+            <div class="stat-val" id="ramStat">12.4GB</div>
+            <div class="stat-bar-container"><div class="stat-bar" id="ramBar" style="width: 77%"></div></div>
+            <p style="font-size:0.7rem; color:var(--text-dim); margin-top:0.4rem;">Usage: <span id="ramPct">23%</span></p>
+        </div>
+        <div class="stat-item">
+            <h4>CPU Load</h4>
+            <div class="stat-val" id="cpuStat">14%</div>
+            <div class="stat-bar-container"><div class="stat-bar" id="cpuBar" style="width: 14%"></div></div>
+            <p style="font-size:0.7rem; color:var(--text-dim); margin-top:0.4rem;">Threads: Active</p>
+        </div>
+        <div class="stat-item">
+            <h4>Optimization</h4>
+            <div class="stat-val" id="fpsStat">144</div>
+            <p style="font-size:0.7rem; color:var(--text-dim); margin-top:0.4rem;">Target Frame Rate</p>
+            <div style="margin-top:1rem;">
+                <label class="switch">
+                    <input type="checkbox" id="boosterToggle" onchange="toggleBooster()">
+                    <span class="slider round"></span>
+                </label>
+                <span id="boosterStatus" style="font-size:0.7rem; margin-left:10px; vertical-align:middle;">Idle</span>
             </div>
         </div>
-        <div class="stat-box">
-            <span class="stat-value" id="cpuStat">—</span>
-            <span class="stat-label">CPU Load</span>
-            <div class="progress-wrap">
-                <div class="progress-label"><span>Utilization</span><span id="cpuPct">—</span></div>
-                <div class="progress-bar"><div class="progress-fill" id="cpuBar" style="width:0%"></div></div>
-            </div>
-        </div>
-        <div class="stat-box">
-            <span class="stat-value" id="fpsStat">144</span>
-            <span class="stat-label">Target FPS</span>
-        </div>
-        <div class="stat-box">
-            <span class="stat-value" id="pingVal">—</span>
-            <span class="stat-label">Est. Ping</span>
-        </div>
-    </div>
-
-    <div class="booster-panel">
-        <div class="booster-info">
-            <h4>Strivon Game Booster</h4>
-            <p id="boosterStatus">Idle — Toggle to start system optimization</p>
-        </div>
-        <div class="booster-controls">
-            <label class="switch">
-                <input type="checkbox" id="boosterToggle" onchange="toggleBooster()">
-                <span class="slider"></span>
-            </label>
-            <a href="StrivonBooster.bat" download class="btn btn-ghost" style="margin-top:0;font-size:0.82rem;">
-                Download .bat
-            </a>
+        <div class="stat-item">
+            <h4>Network</h4>
+            <div class="stat-val" id="pingVal">12ms</div>
+            <div class="stat-bar-container"><div class="stat-bar" style="width: 95%; background:#10b981;"></div></div>
+            <p style="font-size:0.7rem; color:var(--text-dim); margin-top:0.4rem;">Status: Optimal</p>
         </div>
     </div>
 </section>
 
-<!-- FEATURE CARDS -->
-<section>
-    <div class="section-header" style="padding: 3rem 6% 0">
-        <span class="label">What's Inside</span>
-        <h3>Everything You Need</h3>
+<section class="grid" id="downloads">
+    <div class="card">
+        <span class="hero-badge" style="margin-bottom:1rem;">FASTEST</span>
+        <h3>Strivon Booster v2.0</h3>
+        <p>Advanced batch script to optimize system processes, flush caches, and set high-priority scheduling.</p>
+        <a href="StrivonBooster.bat" download class="btn-primary" style="display:inline-block; text-decoration:none;">Download .BAT</a>
     </div>
-    <div class="grid">
-        <div class="card">
-            <span class="card-icon">📜</span>
-            <h3>Script Hub</h3>
-            <p>Educational Lua and Roblox scripts organized by game. Searchable, filterable, copy-ready.</p>
-            <button onclick="window.location.href='scripts.html'">Browse Scripts</button>
-        </div>
-        <div class="card">
-            <span class="card-icon">🚀</span>
-            <h3>Game Booster</h3>
-            <p>Simulate a real optimizer — toggle frees up RAM, applies power plans, and closes background apps.</p>
-            <button onclick="document.getElementById('boosterToggle').click(); scrollTo({top:0,behavior:'smooth'})">Boost Now</button>
-        </div>
-        <div class="card">
-            <span class="card-icon">🎯</span>
-            <h3>Gamer Tools</h3>
-            <p>Razer Cortex, MSI Afterburner, OBS Optimized — links to the best free tools for competitive gaming.</p>
-            <button onclick="document.getElementById('downloads').scrollIntoView({behavior:'smooth'})">View Tools</button>
-        </div>
+    
+    <div class="card">
+        <span class="hero-badge" style="margin-bottom:1rem;">OP SETTINGS</span>
+        <h3>Direct FFlags Config</h3>
+        <p>Optimized JSON for Bloxstrap, Voidstrap, and Fishstrap. Maximum FPS and low-latency rendering.</p>
+        <a href="StrivonFFlags.json" download class="btn-outline" style="display:inline-block; text-decoration:none;">Download .JSON</a>
+    </div>
+
+    <div class="card">
+        <h3>Script Hub</h3>
+        <p>Access our repository of 31 educational Lua modules for research and learning.</p>
+        <button onclick="goScripts()" class="btn-outline">Browse Hub</button>
     </div>
 </section>
 
-<!-- DOWNLOADS -->
-<section class="downloads" id="downloads">
-    <div class="section-header">
-        <span class="label">Tools & Resources</span>
-        <h3>Gamer Essentials</h3>
-        <p>Best free tools to maximize your setup — trusted by millions of players</p>
+<section class="grid" style="padding-top:0;">
+    <div class="card">
+        <span class="hero-badge">NEW</span>
+        <h3>OSU! Mania Meta</h3>
+        <p>Autonomous navigation and input timing research for rhythm-based titles. High-fidelity Lua module.</p>
+        <button onclick="goScripts()" class="btn-outline">View Research</button>
     </div>
-
-    <a href="https://www.razer.com/cortex" target="_blank" class="download-link">
-        <div class="dl-info">
-            <span class="dl-name">Razer Cortex — Game Booster</span>
-            <span class="dl-meta">Free · Closes background apps, boosts RAM, game launcher</span>
-        </div>
-        <span class="dl-action" style="color:var(--green)">Download →</span>
-    </a>
-
-    <a href="https://www.msi.com/Landing/afterburner/graphics-cards" target="_blank" class="download-link">
-        <div class="dl-info">
-            <span class="dl-name">MSI Afterburner — GPU Overclocking</span>
-            <span class="dl-meta">Free · OC, fan control, real-time HUD overlay</span>
-        </div>
-        <span class="dl-action" style="color:var(--cyan)">Download →</span>
-    </a>
-
-    <a href="https://obsproject.com" target="_blank" class="download-link">
-        <div class="dl-info">
-            <span class="dl-name">OBS Studio — Recording & Streaming</span>
-            <span class="dl-meta">Free · Industry standard for recording clips and streaming</span>
-        </div>
-        <span class="dl-action" style="color:var(--purple)">Download →</span>
-    </a>
-
-    <a href="https://www.voicemod.net" target="_blank" class="download-link">
-        <div class="dl-info">
-            <span class="dl-name">Voicemod — Voice Changer</span>
-            <span class="dl-meta">Free · Real-time voice effects for Discord and in-game</span>
-        </div>
-        <span class="dl-action" style="color:var(--green)">Download →</span>
-    </a>
-
-    <a href="StrivonBooster.bat" download class="download-link">
-        <div class="dl-info">
-            <span class="dl-name">Strivon Game Booster (v1.0)</span>
-            <span class="dl-meta">Free · Clears temp files, frees RAM, applies high-performance power plan</span>
-        </div>
-        <span class="dl-action" style="color:var(--cyan)">Download →</span>
-    </a>
 </section>
 
 <footer>
-    <p>© 2026 Strivon Labs — <a href="scripts.html">Script Hub</a> · All scripts are for educational research only.</p>
+    <p>© 2026 Strivon Labs · <a href="scripts.html">Script Hub</a> · <a href="#downloads">Downloads</a></p>
+    <div style="margin-top:1rem; opacity:0.5; font-size:0.7rem;">Strivon Labs logo and identifying marks are trademarks of StrivonLabs.io</div>
 </footer>
 
-<div id="toast">✓ Action complete!</div>
+<div id="toast"></div>
 
 <script src="script.js"></script>
-<script>
-// Simulated live stats
-function updateStats() {
-    const ram = (Math.random() * 4 + 3).toFixed(1);
-    const ramPct = Math.round((16 - ram) / 16 * 100);
-    const cpu = Math.round(Math.random() * 30 + 10);
-    const ping = Math.round(Math.random() * 20 + 12);
-
-    document.getElementById('ramStat').textContent = ram + 'GB';
-    document.getElementById('ramPct').textContent = ramPct + '%';
-    document.getElementById('ramBar').style.width = ramPct + '%';
-    document.getElementById('cpuStat').textContent = cpu + '%';
-    document.getElementById('cpuPct').textContent = cpu + '%';
-    document.getElementById('cpuBar').style.width = cpu + '%';
-    document.getElementById('pingVal').textContent = ping + 'ms';
-}
-updateStats();
-setInterval(updateStats, 3000);
-</script>
 </body>
 </html>
