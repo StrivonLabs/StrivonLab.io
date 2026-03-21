@@ -3,152 +3,586 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strivon Script Hub | Roblox & Lua</title>
+    <title>Script Hub | Strivon Labs</title>
+    <meta name="description" content="Educational Lua and Roblox script repository — 30+ games supported.">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-    <header>
+<header>
+    <div class="logo">
+        <div class="logo-dot"></div>
         <h1>STRIVON LABS</h1>
-        <nav>
-            <a href="index.html">Home</a>
-            <a onclick="goAI()">AI Script Lab</a>
-            <a href="scripts.html">Script Hub</a>
-            <a href="index.html#downloads">Downloads</a>
-        </nav>
-    </header>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="scripts.html" class="active">Script Hub</a>
+        <a href="index.html#downloads">Downloads</a>
+        <a href="index.html#downloads" class="nav-cta">Get Booster</a>
+    </nav>
+</header>
 
-    <section class="hero" style="padding: 4rem 5%">
-        <h2>Elite Script Repository</h2>
-        <p>The most advanced collection of Roblox and Lua scripts, updated daily.</p>
-    </section>
+<section class="hero" style="padding: 4rem 6% 3rem;">
+    <span class="hero-badge">📚 30+ Games Supported</span>
+    <h2>Script <span>Repository</span></h2>
+    <p>Educational Lua snippets and research tools for the world's most popular games.</p>
+</section>
 
-    <div class="search-container">
-        <input type="text" id="scriptSearch" placeholder="Search for a game or script (e.g. 'Jailbreak', 'Vape')..." onkeyup="filterScripts()">
+<!-- CATEGORIES -->
+<div class="hub-tabs" id="tabs">
+    <button class="tab-btn active" onclick="filterTab('all',this)">All</button>
+    <button class="tab-btn" onclick="filterTab('combat',this)">Combat</button>
+    <button class="tab-btn" onclick="filterTab('sim',this)">Simulator</button>
+    <button class="tab-btn" onclick="filterTab('rp',this)">Roleplay</button>
+    <button class="tab-btn" onclick="filterTab('obby',this)">Obby/Horror</button>
+    <button class="tab-btn" onclick="filterTab('meme',this)">Brainrot</button>
+</div>
+
+<!-- SEARCH -->
+<div class="search-container">
+    <div class="search-wrap">
+        <input type="text" id="scriptSearch" placeholder="Search 31 supported games..." oninput="filterSearch()">
+    </div>
+</div>
+
+<!-- GRID -->
+<div class="grid" id="scriptGrid">
+
+    <!-- ESCAPE TSUNAMI FOR BRAINROTS -->
+    <div class="script-card" data-game="meme">
+        <span class="script-badge badge-new">NEW</span>
+        <div class="script-game">Escape Tsunami Brainrot</div>
+        <h3>Water Height Listener</h3>
+        <p>Tracks the Y-coordinate of the 'Tsunami' part in the workspace to predict height.</p>
+        <pre>-- Tsunami Height (Educational)
+local tsunami = workspace:FindFirstChild("Tsunami")
+if tsunami then
+    game:GetService("RunService").Heartbeat:Connect(function()
+        print("Current Tsunami Height: " .. tsunami.Position.Y)
+    end)
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
     </div>
 
-    <div class="grid" id="scriptGrid">
-        <!-- VAPE V4 -->
-        <div class="card" data-title="Vape V4 Roblox Bedwars">
-            <span style="position: absolute; top: 10px; right: 10px; background: var(--razer-green); color: black; padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold;">PREMIUM</span>
-            <h3>Vape V4</h3>
-            <p>The ultimate Bedwars utility. Combat, Movement, and Visuals.</p>
-            <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMain.lua", true))()</pre>
-            <button onclick="copyToClipboard(this)">Copy Script</button>
+    <!-- FISH IT! -->
+    <div class="script-card" data-game="sim">
+        <div class="script-game">Fish It!</div>
+        <h3>Fishing Event Detection</h3>
+        <p>Monitors RemoteEvents triggered during the fishing sequence for mechanical study.</p>
+        <pre>-- Fishing Event Logger (Educational)
+local RS = game:GetService("ReplicatedStorage")
+RS.ChildAdded:Connect(function(child)
+    if child:IsA("RemoteEvent") and child.Name:find("Fish") then
+        print("Fishing event detected: " .. child.Name)
+    end
+end)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
         </div>
-
-        <!-- JAILBREAK -->
-        <div class="card" data-title="Jailbreak Auto Farm">
-            <h3>Jailbreak</h3>
-            <p>Auto-rob, Infinite Nitro, and Instant Teleport.</p>
-            <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/Strivon/Jailbreak/main/AutoFarm.lua"))()</pre>
-            <button onclick="copyToClipboard(this)">Copy Script</button>
-        </div>
-
-        <!-- 99 NIGHTS -->
-        <div class="card" data-title="99 Nights God Mode">
-            <h3>99 Nights</h3>
-            <p>God Mode, Infinite Coins, and Speed Multiplier.</p>
-            <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/Strivon/99Nights/main/Hub.lua"))()</pre>
-            <button onclick="copyToClipboard(this)">Copy Script</button>
-        </div>
-
-        <!-- UNIVERSAL AIMBOT -->
-        <div class="card" data-title="Universal Aimbot ESP">
-            <h3>Universal Aimbot</h3>
-            <p>Works on 500+ games. Silent Aim, Smoothing, and Box ESP.</p>
-            <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/Strivon/Universal/main/Aimbot.lua"))()</pre>
-            <button onclick="copyToClipboard(this)">Copy Script</button>
-        </div>
-
-        <!-- ANTI-CHEAT BYPASS -->
-        <div class="card" data-title="Anti-cheat Bypass Injection">
-            <h3>Anti-cheat Bypass</h3>
-            <p>Bypass Byfron and Hyperion detections with stealth injection.</p>
-            <pre>-- Strivon Stealth Injection System v2.1
--- Protected by Strivon Labs</pre>
-            <button onclick="comingSoon()">Get Key</button>
-        </div>
-
-        <!-- BLOX FRUITS -->
-        <div class="card" data-title="Blox Fruits Auto Quest">
-            <h3>Blox Fruits</h3>
-            <p>Level Farm, Raid Helper, and Fruit Finder.</p>
-            <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/Strivon/BloxFruits/main/Main.lua"))()</pre>
-            <button onclick="copyToClipboard(this)">Copy Script</button>
-        </div>
-
-        <!-- MURDER MYSTERY 2 -->
-        <div class="card" data-title="Murder Mystery 2 MM2 Silent Aim">
-            <h3>Murder Mystery 2</h3>
-            <p>Esp, Silent Aim (Sheriff), and Auto-Collect Coins.</p>
-            <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/Strivon/MM2/main/Hub.lua"))()</pre>
-            <button onclick="copyToClipboard(this)">Copy Script</button>
-        </div>
-
-        <!-- PET SIMULATOR 99 -->
-        <div class="card" data-title="Pet Simulator 99 Auto Hatch">
-            <h3>Pet Simulator 99</h3>
-            <p>Auto-Hatch, Gem Farm, and Trade Scammer Protection.</p>
-            <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/Strivon/PS99/main/Farm.lua"))()</pre>
-            <button onclick="copyToClipboard(this)">Copy Script</button>
-        </div>
-
-        <!-- ARSENAL -->
-        <div class="card" data-title="Arsenal Silent Aim Wallhack">
-            <h3>Arsenal</h3>
-            <p>Kill All, Wallhack, and No Recoil.</p>
-            <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/Strivon/Arsenal/main/Aimbot.lua"))()</pre>
-            <button onclick="copyToClipboard(this)">Copy Script</button>
-        </div>
-
-        <!-- DOORS -->
-        <div class="card" data-title="Doors Entity Notifier">
-            <h3>Doors</h3>
-            <p>Entity Notifier, Speed Boost, and Item ESP.</p>
-            <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/Strivon/Doors/main/Helper.lua"))()</pre>
-            <button onclick="copyToClipboard(this)">Copy Script</button>
-        </div>
-
     </div>
 
-    <footer>
-        <p>© 2026 Strivon Labs. Use at your own risk. Scripts are for educational purposes.</p>
-    </footer>
+    <!-- 99 NIGHTS IN THE FOREST -->
+    <div class="script-card" data-game="obby">
+        <div class="script-game">99 Nights Forest</div>
+        <h3>Lighting & Fog Adjuster</h3>
+        <p>Modifies Atmosphere and Lighting to improve visibility in dark forest environments.</p>
+        <pre>-- Forest Clarity (Educational)
+local l = game:GetService("Lighting")
+l.Brightness = 2
+l.ClockTime = 12
+l.GlobalShadows = false
+if l:FindFirstChildOfClass("Atmosphere") then
+    l:FindFirstChildOfClass("Atmosphere").Density = 0
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
 
-    <script src="script.js"></script>
-    <script>
-        function filterScripts() {
-            const input = document.getElementById('scriptSearch');
-            const filter = input.value.toLowerCase();
-            const grid = document.getElementById('scriptGrid');
-            const cards = grid.getElementsByClassName('card');
+    <!-- BROOKHAVEN RP -->
+    <div class="script-card" data-game="rp">
+        <span class="script-badge badge-free">FREE</span>
+        <div class="script-game">Brookhaven RP</div>
+        <h3>House Unlocker Prototype</h3>
+        <p>Reads the 'Locked' attribute of house models to understand game state management.</p>
+        <pre>-- House State Reader (Educational)
+for _, v in pairs(workspace.Vehicles:GetChildren()) do
+    if v:IsA("Model") and v:GetAttribute("Locked") then
+        print(v.Name .. " is currently locked.")
+    end
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
 
-            for (let i = 0; i < cards.length; i++) {
-                const title = cards[i].getAttribute('data-title').toLowerCase();
-                if (title.indexOf(filter) > -1) {
-                    cards[i].style.display = "";
-                } else {
-                    cards[i].style.display = "none";
-                }
+    <!-- BLOX FRUITS -->
+    <div class="script-card" data-game="combat">
+        <span class="script-badge badge-hot">HOT</span>
+        <div class="script-game">Blox Fruits</div>
+        <h3>Fruit Spawn Locator</h3>
+        <p>Scans the workspace for parts containing 'Fruit' in their name for spawn research.</p>
+        <pre>-- Fruit Scanner (Educational)
+for _, v in pairs(workspace:GetDescendants()) do
+    if v.Name:find("Fruit") and v:IsA("BasePart") then
+        print("Potential Fruit at: " .. tostring(v.Position))
+    end
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- RIVALS -->
+    <div class="script-card" data-game="combat">
+        <div class="script-game">RIVALS</div>
+        <h3>Hitbox Visualizer</h3>
+        <p>Creates temporary adornments around character hitboxes to study collision zones.</p>
+        <pre>-- Hitbox Visualizer (Educational)
+local function visual(part)
+    local b = Instance.new("SelectionBox", part)
+    b.Adornee = part
+    b.Color3 = Color3.new(1,0,0)
+end
+for _, p in pairs(game.Players:GetPlayers()) do
+    if p.Character then visual(p.Character.Head) end
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- ADOPT ME! -->
+    <div class="script-card" data-game="rp">
+        <div class="script-game">Adopt Me!</div>
+        <h3>Pet Attribute Reader</h3>
+        <p>Logs pet stats like 'Hunger' and 'Sleep' by accessing the pet's attribute folder.</p>
+        <pre>-- Pet Stat Reader (Educational)
+local folder = game.Players.LocalPlayer:FindFirstChild("PetFolder")
+if folder then
+    for _, pet in pairs(folder:GetChildren()) do
+        print(pet.Name .. " Hunger: " .. pet:GetAttribute("Hunger"))
+    end
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- JUJUTSU SHENANIGANS -->
+    <div class="script-card" data-game="combat">
+        <div class="script-game">Jujutsu Shenanigans</div>
+        <h3>Ability Cooldown Timer</h3>
+        <p>Uses tick() to measure the duration between specific ability RemoteEvents.</p>
+        <pre>-- Cooldown Monitor (Educational)
+local start = tick()
+game:GetService("ReplicatedStorage").Remotes.Ability:Connect(function()
+    print("CD since last use: " .. (tick() - start))
+    start = tick()
+end)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- STEAL A BRAINROT -->
+    <div class="script-card" data-game="meme">
+        <span class="script-badge badge-new">NEW</span>
+        <div class="script-game">Steal a Brainrot</div>
+        <h3>Item Proximity Tracker</h3>
+        <p>Calculates the distance to the nearest 'Brainrot' object in the game world.</p>
+        <pre>-- Item Radar (Educational)
+local function getDist(obj)
+    local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+    return (hrp.Position - obj.Position).Magnitude
+end
+print("Distance to Rot: " .. getDist(workspace.TargetRot))</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- BEE SWARM SIMULATOR -->
+    <div class="script-card" data-game="sim">
+        <div class="script-game">Bee Swarm Sim</div>
+        <h3>Pollen Field Monitor</h3>
+        <p>Logs the current pollen capacity from the player's HUD elements.</p>
+        <pre>-- Pollen Monitor (Educational)
+local gui = game.Players.LocalPlayer.PlayerGui.MainGui.PollenBar
+print("Current Pollen: " .. gui.Fill.Size.X.Scale * 100 .. "%")</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- THE STRONGEST BATTLEGROUNDS -->
+    <div class="script-card" data-game="combat">
+        <span class="script-badge badge-hot">HOT</span>
+        <div class="script-game">Strongest Battlegrounds</div>
+        <h3>Combo Buffer Listener</h3>
+        <p>Listens for input sequences to study how the game handles combo strings.</p>
+        <pre>-- Combo Tracker (Educational)
+game:GetService("UserInputService").InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 then
+        print("M1 clicked at: " .. tick())
+    end
+end)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- MURDER MYSTERY 2 -->
+    <div class="script-card" data-game="combat">
+        <div class="script-game">Murder Mystery 2</div>
+        <h3>Role Assignment Detection</h3>
+        <p>Monitors player inventory items (Knife/Gun) to deduce active round roles.</p>
+        <pre>-- Role Deduce (Educational)
+for _, p in pairs(game.Players:GetPlayers()) do
+    if p.Backpack:FindFirstChild("Knife") or (p.Character and p.Character:FindFirstChild("Knife")) then
+        print(p.Name .. " is the Murderer!")
+    end
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- FORSAKEN -->
+    <div class="script-card" data-game="obby">
+        <div class="script-game">Forsaken</div>
+        <h3>Darkness Multiplier</h3>
+        <p>Adjusts the local player's brightness exposure to navigate Forsaken's dark zones.</p>
+        <pre>-- Exposure Mod (Educational)
+local l = game:GetService("Lighting")
+l.ExposureCompensation = 3
+l.OutdoorAmbient = Color3.new(1,1,1)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- ANIME VANGUARDS -->
+    <div class="script-card" data-game="combat">
+        <div class="script-game">Anime Vanguards</div>
+        <h3>Tower Stat Extractor</h3>
+        <p>Iterates through active towers to print their 'Damage' and 'Range' stats.</p>
+        <pre>-- Tower Stats (Educational)
+for _, t in pairs(workspace.Towers:GetChildren()) do
+    print(t.Name .. " | Damage: " .. t:GetAttribute("Dmg"))
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- ESCAPE WAVES -->
+    <div class="script-card" data-game="obby">
+        <div class="script-game">Escape Waves</div>
+        <h3>Wave Speed Calculator</h3>
+        <p>Calculates wave velocity based on position delta over time intervals.</p>
+        <pre>-- Wave Speed (Educational)
+local w = workspace.Wave
+local p1 = w.Position
+task.wait(1)
+local p2 = w.Position
+print("Wave Speed: " .. (p2-p1).Magnitude .. " studs/sec")</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- LUCKY BLOCK BATTLEGROUNDS -->
+    <div class="script-card" data-game="combat">
+        <div class="script-game">Lucky Block BG</div>
+        <h3>Block Spawn Timer</h3>
+        <p>Detects when new 'LuckyBlock' instances are added to the game workspace.</p>
+        <pre>-- Block Watch (Educational)
+workspace.ChildAdded:Connect(function(c)
+    if c.Name:find("LuckyBlock") then
+        print("New Block Spawned at: " .. tostring(c.Position))
+    end
+end)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- DANDY’S WORLD -->
+    <div class="script-card" data-game="obby">
+        <div class="script-game">Dandy’s World</div>
+        <h3>Interaction Zone Finder</h3>
+        <p>Highlights ProximityPrompts within 50 studs to study game objective layouts.</p>
+        <pre>-- Prompt Visuals (Educational)
+for _, p in pairs(workspace:GetDescendants()) do
+    if p:IsA("ProximityPrompt") then
+        print("Objective found: " .. p.ObjectText)
+    end
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- MAPS KNOCKOUT -->
+    <div class="script-card" data-game="combat">
+        <div class="script-game">MAPS Knockout</div>
+        <h3>Physics Impulser</h3>
+        <p>Demonstrates how the game applies Knockback via LinearVelocity or Impulses.</p>
+        <pre>-- KB Study (Educational)
+local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+hrp:ApplyImpulse(Vector3.new(0, 500, 0)) -- Simulated KB</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- FISCH -->
+    <div class="script-card" data-game="sim">
+        <div class="script-game">Fisch</div>
+        <h3>Water Depth Depth-Finder</h3>
+        <p>Uses Raycasting to determine water depth at the player's current position.</p>
+        <pre>-- Depth Check (Educational)
+local r = workspace:Raycast(
+    game.Players.LocalPlayer.Character.Head.Position,
+    Vector3.new(0,-500,0)
+)
+if r then print("Water Depth: " .. r.Distance) end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- SOL’S RNG -->
+    <div class="script-card" data-game="sim">
+        <span class="script-badge badge-hot">HOT</span>
+        <div class="script-game">Sol’s RNG</div>
+        <h3>Aura Name Logger</h3>
+        <p>Intercepts Aura-change events to log the rarity of rolled items.</p>
+        <pre>-- Aura Logger (Educational)
+game.Players.LocalPlayer:GetAttributeChangedSignal("Aura"):Connect(function()
+    print("New Roll: " .. game.Players.LocalPlayer:GetAttribute("Aura"))
+end)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- GROW A GARDEN -->
+    <div class="script-card" data-game="sim">
+        <div class="script-game">Grow a Garden</div>
+        <h3>Plant Maturity Tracker</h3>
+        <p>Reads the 'Growth' percentage value of assigned plot objects in the world.</p>
+        <pre>-- Growth Reader (Educational)
+for _, p in pairs(workspace.Plots:GetChildren()) do
+    if p.Owner.Value == game.Players.LocalPlayer then
+        print("Plant Progress: " .. p.Growth.Value .. "%")
+    end
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- TOWER OF HELL -->
+    <div class="script-card" data-game="obby">
+        <div class="script-game">Tower of Hell</div>
+        <h3>Jump Sensitivity Mod</h3>
+        <p>Increases JumpPower slightly to study how obby physics respond to force changes.</p>
+        <pre>-- Jump Boost (Educational)
+local h = game.Players.LocalPlayer.Character.Humanoid
+h.UseJumpPower = true
+h.JumpPower = 65 -- Default ~50</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- ARSENAL -->
+    <div class="script-card" data-game="combat">
+        <div class="script-game">Arsenal</div>
+        <h3>FOVs Visualizer</h3>
+        <p>Draws a circular circle around the screen center to represent 'Field of View'.</p>
+        <pre>-- FOV Circle (Educational)
+local c = Drawing.new("Circle")
+c.Radius = 100
+c.Thickness = 1
+c.Visible = true
+c.Position = Vector2.new(workspace.CurrentCamera.ViewportSize.X/2, workspace.CurrentCamera.ViewportSize.Y/2)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- JAILBREAK -->
+    <div class="script-card" data-game="combat">
+        <div class="script-game">Jailbreak</div>
+        <h3>Vault Status Checker</h3>
+        <p>Determines if the Bank vault is open by checking the Door state in workspace.</p>
+        <pre>-- Bank Check (Educational)
+local bank = workspace.Banks:GetChildren()[1]
+print("Bank is: " .. (bank.Door.Open.Value and "Open" or "Closed"))</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- DOORS -->
+    <div class="script-card" data-game="obby">
+        <div class="script-game">Doors</div>
+        <h3>Entity Notifier</h3>
+        <p>Prints a warning message when 'Rush' or 'Ambush' parts enter the workspace.</p>
+        <pre>-- Entity Alert (Educational)
+workspace.ChildAdded:Connect(function(c)
+    if c.Name == "Rush" or c.Name == "Ambush" then
+        print("⚠️ ENTITY DETECTED!")
+    end
+end)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- PET SIMULATOR 99 -->
+    <div class="script-card" data-game="sim">
+        <div class="script-game">Pet Simulator 99</div>
+        <h3>Coin Spawn Monitor</h3>
+        <p>Tracks how many coin instances are active in the current zone for farm density research.</p>
+        <pre>-- Density Check (Educational)
+local coins = 0
+for _, c in pairs(workspace.Coins:GetChildren()) do
+    coins += 1
+end
+print("Coins in Zone: " .. coins)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- PIGGY -->
+    <div class="script-card" data-game="obby">
+        <div class="script-game">Piggy</div>
+        <h3>Bot Location Ping</h3>
+        <p>Finds the 'Piggy' NPC model and prints its distance from the player.</p>
+        <pre>-- Piggy Radar (Educational)
+local pig = workspace:FindFirstChild("Piggy")
+if pig then
+    local dist = (pig.Head.Position - game.Players.LocalPlayer.Character.Head.Position).Magnitude
+    print("Piggy is " .. math.floor(dist) .. " studs away")
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- BUILD A BOAT FOR TREASURE -->
+    <div class="script-card" data-game="sim">
+        <div class="script-game">Build A Boat</div>
+        <h3>Auto-Click Propeller</h3>
+        <p>Simulates the activation of boat parts by firing ClickDetectors in a loop.</p>
+        <pre>-- Part Trigger (Educational)
+for _, p in pairs(workspace.Vehicles:GetDescendants()) do
+    if p:IsA("ClickDetector") then
+        fireclickdetector(p)
+    end
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- PHANTOM FORCES -->
+    <div class="script-card" data-game="combat">
+        <div class="script-game">Phantom Forces</div>
+        <h3>Recoil Data Extractor</h3>
+        <p>Accesses the meta-tables of local weapons to read recoil and kickback values.</p>
+        <pre>-- Recoil Study (Educational)
+-- Note: Requires G.MT access
+for k, v in pairs(getgc(true)) do
+    if type(v) == "table" and v.RecoilData then
+        print("Weapon Recoil: ", v.RecoilData.Magnitude)
+    end
+end</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- WORK AT A PIZZA PLACE -->
+    <div class="script-card" data-game="rp">
+        <div class="script-game">Pizza Place</div>
+        <h3>Job Efficiency Tracker</h3>
+        <p>Counts the number of completed orders by watching the 'MoneyGained' leaderstat change.</p>
+        <pre>-- Money Watch (Educational)
+local m = game.Players.LocalPlayer.leaderstats.Money
+m:GetPropertyChangedSignal("Value"):Connect(function()
+    print("Profit Gained! Total: " .. m.Value)
+end)</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+    <!-- MEEPCITY -->
+    <div class="script-card" data-game="rp">
+        <div class="script-game">MeepCity</div>
+        <h3>Coin Multiplier Logic</h3>
+        <p>Educational example of how MeepCity's Meep-based coin multipliers are structure.</p>
+        <pre>-- Meep Logic (Educational)
+local function getMult(meepCount)
+    return 1 + (meepCount * 0.1) -- 10% per meep
+end
+print("Current Multiplier: " .. getMult(5) .. "x")</pre>
+        <div class="card-actions">
+            <button onclick="copyScript(this)" class="btn-outline">Copy</button>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 Strivon Labs · All code is for educational and research purposes only · <a href="index.html">Home</a></p>
+</footer>
+
+<div id="toast"></div>
+
+<script src="script.js"></script>
+<script>
+    function filterTab(cat, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.script-card').forEach(card => {
+            if (cat === 'all' || card.dataset.game === cat) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
             }
-        }
+        });
+    }
 
-        function copyToClipboard(btn) {
-            const pre = btn.previousElementSibling;
-            const text = pre.innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = "COPIED!";
-                btn.style.background = "var(--accent-cyan)";
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.background = "var(--razer-green)";
-                }, 2000);
-            });
-        }
-    </script>
+    function filterSearch() {
+        const q = document.getElementById('scriptSearch').value.toLowerCase();
+        document.querySelectorAll('.script-card').forEach(card => {
+            const text = card.innerText.toLowerCase();
+            card.style.display = text.includes(q) ? '' : 'none';
+        });
+    }
+
+    function copyScript(btn) {
+        const pre = btn.closest('.script-card').querySelector('pre');
+        navigator.clipboard.writeText(pre.innerText).then(() => {
+            showToast('✓ Script copied to clipboard!');
+        });
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3200);
+    }
+</script>
 </body>
 </html>
