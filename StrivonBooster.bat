@@ -30,10 +30,10 @@ echo [*] Flushing DNS Cache...
 ipconfig /flushdns >nul 2>&1
 
 echo [*] RAM Purge (Closing Latency Hogs)...
-taskkill /f /im "msedge.exe" >nul 2>&1
 taskkill /f /im "chrome.exe" >nul 2>&1
-taskkill /f /im "spotify.exe" >nul 2>&1
-taskkill /f /im "discord.exe" >nul 2>&1
+taskkill /f /im "OneDrive.exe" >nul 2>&1
+taskkill /f /im "Cortana.exe" >nul 2>&1
+taskkill /f /im "YourPhone.exe" >nul 2>&1
 
 echo.
 echo ======================================================================================

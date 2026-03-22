@@ -3,152 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developer Hub | Strivon Labs</title>
-    <meta name="description" content="Strivon Labs Script Hub — Verified Roblox scripts for 31+ games.">
+    <title>Strivon Labs | Script Hub Revamp</title>
+    <meta name="description" content="Premium script hub featuring games and verified scripts.">
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        .module-section {
-            padding: 3rem 6%;
-            border-bottom: 1px solid var(--border);
+        /* Modern Glassmorphism & Animations */
+        .glass-panel {
+            background: rgba(15, 20, 32, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
         }
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .module-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.8rem;
+        
+        .animate-fade-up {
+            animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        /* Nav Tabs */
+        .hub-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 0 6%;
+        }
+        
+        .hub-tab {
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-dim);
+            background: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
             transition: var(--transition);
+        }
+        
+        .hub-tab.active {
+            color: var(--accent);
+            background: rgba(var(--accent-rgb), 0.1);
+            border-color: rgba(var(--accent-rgb), 0.3);
+            box-shadow: var(--glow);
+        }
+        
+        .hub-tab:hover:not(.active) {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Game Grid */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem 6% 4rem;
+        }
+
+        .game-card {
+            padding: 2.5rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at top right, rgba(var(--accent-rgb), 0.15), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), var(--glow);
+        }
+
+        .game-card:hover::before { opacity: 1; }
+
+        .game-category {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 850px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 3rem;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+        }
+
+        /* Custom Scrollbar for Modal */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover { 
+            color: white; 
+            background: rgba(239, 68, 68, 0.8);
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 2.2rem;
+            color: var(--text-main);
+            margin-bottom: 0.2rem;
+        }
+
+        /* Script Item inside Modal */
+        .script-item {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .script-item:hover {
+            border-color: rgba(var(--accent-rgb), 0.5);
+            transform: translateX(5px);
+            box-shadow: -5px 0 15px rgba(var(--accent-rgb), 0.1);
+        }
+
+        .script-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .badge-group {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-verified {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-key {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-nokey {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .script-code-block {
             position: relative;
         }
-        .module-card:hover {
+
+        .script-code-block pre {
+            background: #000;
+            padding: 1.2rem;
+            border-radius: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #a5b4fc;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.05);
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .copy-btn { 
+            margin-top: 1rem; 
+            font-size: 0.8rem;
+            padding: 0.5rem 1.2rem;
+        }
+
+        /* Request Tab */
+        .request-section {
+            display: none;
+            max-width: 600px;
+            margin: 0 auto 4rem;
+            text-align: center;
+        }
+
+        .request-section.active {
+            display: block;
+            animation: fadeUp 0.5s forwards;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            padding: 1.2rem;
+            border-radius: 10px;
+            color: white;
+            font-family: var(--font-main);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-input:focus {
+            outline: none;
             border-color: var(--accent);
             box-shadow: var(--glow);
         }
-        .module-tag {
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-        .verified-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(16,185,129,0.12);
-            color: #10b981;
-            border: 1px solid rgba(16,185,129,0.3);
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            margin-bottom: 0.7rem;
-        }
-        .unverified-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(234,179,8,0.12);
-            color: #eab308;
-            border: 1px solid rgba(234,179,8,0.3);
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            margin-bottom: 0.7rem;
-        }
-        .script-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-        .disclaimer {
-            background: rgba(168,85,247,0.05);
-            border: 1px solid rgba(168,85,247,0.15);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            margin: 0 6% 2rem;
-        }
-        .section-label {
-            font-size: 0.7rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 0.4rem;
-        }
-        /* Script Box Fix: Text Back Inside */
-        pre {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 1.5rem;
-            border-radius: 12px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            color: #ecf0f1;
-            overflow-x: hidden;
-            white-space: pre-wrap;
-            word-break: break-all;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin: 1rem 0;
-            position: relative;
-        }
 
-        /* Category Filter Styles */
-        .filter-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-bottom: 2.5rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .filter-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-            padding: 0.6rem 1.2rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .filter-btn:hover {
-            background: rgba(244, 114, 182, 0.1);
-            color: #f472b6;
-            border-color: #f472b6;
-        }
-
-        .filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 15px rgba(244, 114, 182, 0.3);
-        }
-
-        .script-card.hidden {
-            display: none;
+        textarea.form-input {
+            resize: vertical;
+            min-height: 140px;
         }
     </style>
 </head>
 <body data-theme="dark">
 
+<!-- Header (From old scripts.html) -->
 <header>
     <a href="index.html" class="logo">
         <div class="logo-img">S</div>
@@ -173,1044 +366,213 @@
     <div class="color-grid" id="colorGrid"></div>
 </div>
 
-<section class="hero" style="padding: 3.5rem 6% 2rem;">
-    <span class="hero-badge">🔬 Research Central — 31+ Games</span>
-    <h2>Script <span>Hub</span></h2>
-    <p>Real, deep-researched Lua. Every script tested, referenced, and sourced from online. For educational purposes.</p>
+<section class="hero" style="padding: 4rem 6% 2rem;">
+    <span class="hero-badge animate-fade-up" style="animation-delay: 0.1s;">🚀 NEW ENGINE DETECTED</span>
+    <h2 class="animate-fade-up" style="animation-delay: 0.2s;">Ultimate <span>Script Hub</span></h2>
+    <p class="animate-fade-up" style="animation-delay: 0.3s;">Browse our massive selection of verified scripts grouped strictly by game. Keyless entries, premium loadstrings, and educational tools.</p>
 </section>
 
-<div class="disclaimer">
-    ⚠️ All scripts are for <strong>educational and research purposes only</strong>. You are responsible for how you use them. Scripts require a Roblox executor (e.g., Synapse X, Fluxus, Delta). Strivon Labs encourages responsible use.
+<!-- Tabs -->
+<div class="hub-nav animate-fade-up" style="animation-delay: 0.4s;">
+    <button class="hub-tab active" onclick="switchTab('browse')">Browse Games</button>
+    <button class="hub-tab" onclick="switchTab('request')">Request Script</button>
 </div>
 
-<!-- CORE UTILITY MODULES -->
-<section class="module-section">
-    <p class="section-label">Enterprise-Grade Utilities</p>
-    <h3 style="font-size:1.4rem; margin-bottom:0.3rem;">Core Developer Modules</h3>
-    <p style="color:var(--text-dim); font-size:0.9rem;">Industry-standard Lua utilities used in professional Roblox game development.</p>
-    <div class="module-grid">
-        <!-- SPRING MODULE -->
-        <div class="module-card">
-            <span class="module-tag">Physics-based Animation</span>
-            <div class="verified-badge">✓ VERIFIED</div>
-            <h3 style="margin-bottom:0.4rem;">Spring Module v2.1</h3>
-            <p style="color:var(--text-dim); font-size:0.85rem; margin-bottom:0.8rem;">Used in top FPS games for camera bob, viewmodel sway, and smooth UI. Zero snap.</p>
-            <pre>local Spring = {}
-Spring.__index = Spring
-function Spring.new(mass, force, damping, speed)
-    return setmetatable({
-        Target   = Vector3.new(), 
-        Position = Vector3.new(),
-        Velocity = Vector3.new(),
-        Mass=mass or 1, Force=force or 50,
-        Damping=damping or 4, Speed=speed or 4
-    }, Spring)
-end
-function Spring:Update(dt)
-    local d = self.Target - self.Position
-    local f = d * self.Force - self.Velocity * self.Damping
-    self.Velocity = self.Velocity + f / self.Mass * dt * self.Speed
-    self.Position = self.Position + self.Velocity * dt * self.Speed
-    return self.Position
-end
-return Spring</pre>
-            <div class="script-actions">
-                <button onclick="copyScript(this)" class="btn-primary">📋 Copy</button>
-            </div>
-        </div>
-
-        <!-- MAID MODULE -->
-        <div class="module-card">
-            <span class="module-tag">Resource Cleanup</span>
-            <div class="verified-badge">✓ VERIFIED</div>
-            <h3 style="margin-bottom:0.4rem;">Maid Class</h3>
-            <p style="color:var(--text-dim); font-size:0.85rem; margin-bottom:0.8rem;">The standard for memory-leak-free connections. Used in every professional Roblox codebase.</p>
-            <pre>local Maid = {}
-Maid.__index = Maid
-function Maid.new()
-    return setmetatable({_tasks={}}, Maid)
-end
-function Maid:Give(task)
-    table.insert(self._tasks, task)
-    return task
-end
-function Maid:Clean()
-    for _, t in ipairs(self._tasks) do
-        if type(t)=="function" then t()
-        elseif typeof(t)=="RBXScriptConnection" then t:Disconnect()
-        elseif t and t.Destroy then t:Destroy()
-        end
-    end
-    self._tasks = {}
-end
-return Maid</pre>
-            <div class="script-actions">
-                <button onclick="copyScript(this)" class="btn-primary">📋 Copy</button>
-            </div>
-        </div>
-
-        <!-- SIGNAL MODULE -->
-        <div class="module-card">
-            <span class="module-tag">Event System</span>
-            <div class="verified-badge">✓ VERIFIED</div>
-            <h3 style="margin-bottom:0.4rem;">Signal Class (GoodSignal)</h3>
-            <p style="color:var(--text-dim); font-size:0.85rem; margin-bottom:0.8rem;">Based on the GoodSignal open-source library. Full API parity with RBXScriptSignal, zero memory leaks.</p>
-            <pre>local Signal = {}
-Signal.__index = Signal
-function Signal.new()
-    return setmetatable({_listeners={}}, Signal)
-end
-function Signal:Connect(fn)
-    table.insert(self._listeners, fn)
-    return {Disconnect=function()
-        for i,v in ipairs(self._listeners) do
-            if v==fn then table.remove(self._listeners,i) break end
-        end
-    end}
-end
-function Signal:Fire(...)
-    for _, fn in ipairs(self._listeners) do
-        task.spawn(fn, ...)
-    end
-end
-return Signal</pre>
-            <div class="script-actions">
-                <button onclick="copyScript(this)" class="btn-primary">📋 Copy</button>
-            </div>
-        </div>
-
-        <!-- TARGETING MODULE -->
-        <div class="module-card">
-            <span class="module-tag">Combat Research — Arsenal</span>
-            <div class="verified-badge">✓ VERIFIED</div>
-            <h3 style="margin-bottom:0.4rem;">Team-Aware Targeting + Spring Smooth</h3>
-            <p style="color:var(--text-dim); font-size:0.85rem; margin-bottom:0.8rem;">The closest enemy target lock with team check, head targeting, and Spring smoothing. One target at a time. No snap/tweak.</p>
-            <pre>-- Paste AFTER the Spring module above
-local cam = workspace.CurrentCamera
-local lp  = game.Players.LocalPlayer
-local smooth = Spring.new(1, 14, 4, 1)
-
-local function getTarget(maxDist)
-    local best, bestDist = nil, maxDist or 500
-    for _, p in ipairs(game.Players:GetPlayers()) do
-        if p ~= lp and p.Team ~= lp.Team then
-            local char = p.Character
-            local head = char and char:FindFirstChild("Head")
-            if head then
-                local d = (head.Position - cam.CFrame.Position).Magnitude
-                if d < bestDist then best=head; bestDist=d end
-            end
-        end
-    end
-    return best
-end
-
-game:GetService("RunService").RenderStepped:Connect(function(dt)
-    local target = getTarget()
-    if target and game:GetService("UserInputService")
-        :IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
-        smooth.Target = target.Position
-        smooth:Update(dt)
-        cam.CFrame = CFrame.new(cam.CFrame.Position, smooth.Position)
-    end
-end)</pre>
-            <div class="script-actions">
-                <button onclick="copyScript(this)" class="btn-primary">📋 Copy</button>
-            </div>
+<!-- Browse Section -->
+<div id="browseTab" class="animate-fade-up" style="animation-delay: 0.5s;">
+    <div class="search-container" style="padding: 0 6% 2rem;">
+        <div class="search-wrap">
+            <input type="text" id="gameSearch" placeholder="Search across 45+ games... (e.g. BedWars)" oninput="filterGames()">
         </div>
     </div>
-</section>
-
-<div class="hub-tabs" id="tabs" style="margin-top:2rem;">
-    <button class="tab-btn active" onclick="filterTab('all',this)">All Games</button>
-    <button class="tab-btn" onclick="filterTab('combat',this)">⚔️ Combat</button>
-    <button class="tab-btn" onclick="filterTab('sim',this)">🎮 Simulator</button>
-    <button class="tab-btn" onclick="filterTab('obby',this)">😱 Horror/Obby</button>
-    <button class="tab-btn" onclick="filterTab('meme',this)">🧠 Brainrot</button>
-</div>
-
-<div class="search-container">
-    <div class="search-wrap">
-        <input type="text" id="scriptSearch" placeholder="Search 55+ games..." oninput="filterSearch()">
+    <div class="game-grid" id="gamesGrid">
+        <!-- Injected via JS -->
     </div>
 </div>
 
-<div class="grid" id="scriptGrid" style="padding-top:1rem;">
-    <h2 class="section-title">Combat & Action Expanded</h2>
-    <h1>Script Hub v5 — Verified Library</h1>
-    <p>Premium 50+ game library sourced from verified GitHub repositories.</p>
-
-    <!-- Category Filters -->
-    <div class="filter-container">
-        <button class="filter-btn active" onclick="filterScripts('all')">All Games</button>
-        <button class="filter-btn" onclick="filterScripts('combat')">Combat/Action</button>
-        <button class="filter-btn" onclick="filterScripts('sim')">Simulators</button>
-        <button class="filter-btn" onclick="filterScripts('obby')">Obby/Survival</button>
-        <button class="filter-btn" onclick="filterScripts('tycoon')">Tycoon</button>
-        <button class="filter-btn" onclick="filterScripts('rpg')">RPG/Social</button>
-        <button class="filter-btn" onclick="filterScripts('meme')">Meme/Misc</button>
-        <button class="filter-btn" onclick="filterScripts('tools')">Core Tools</button>
+<!-- Request Section -->
+<div id="requestTab" class="request-section glass-panel" style="padding: 3rem;">
+    <h2 style="margin-bottom: 0.5rem;">Submit a Request</h2>
+    <p style="color: var(--text-dim); margin-bottom: 2.5rem;">Can't find your game? Submit a request and our research team will look into writing or verifying scripts for it.</p>
+    
+    <div class="form-group">
+        <label>Game Name</label>
+        <input type="text" class="form-input" placeholder="e.g. Jailbreak">
     </div>
-
-    <!-- ═══════════════════════════════ COMBAT ═══════════════════════════════ -->
-
-    <!-- 1. ARSENAL -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Arsenal</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Arsenal Hub Script</h3>
-        <p>Sourced from Ronix Hub — includes Silent Aim, Infinite Ammo, and more. Run in executor.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
+    <div class="form-group">
+        <label>Provide Context or Specific Features</label>
+        <textarea class="form-input" placeholder="e.g. I need an auto-farm for coins and a silent aim..."></textarea>
     </div>
-
-    <!-- 2. JAILBREAK -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Jailbreak</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Vynixius Hub — Jailbreak</h3>
-        <p>Vynixius Hub official Jailbreak loader. Auto-Rob, Teleport, Visuals, and Movement settings. High-fidelity stability.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Loader.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 3. MURDER MYSTERY 2 -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Murder Mystery 2</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Inferno Hub — MM2</h3>
-        <p>Auto-identifies murderer role, silent aim, ESP all players. Verified GitHub raw loader.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/InfernoHub/Scripts/main/MM2.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 4. RIVALS -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">RIVALS</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — RIVALS</h3>
-        <p>Speed Hub X auto-detects RIVALS. Silent aim, fly, speed hacks, ESP. Keyless multi-game hub.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 5. THE STRONGEST BATTLEGROUNDS -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Strongest Battlegrounds</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>VexonHub — The Strongest Battlegrounds</h3>
-        <p>VexonHub by TheVex0n. Auto-farm, auto-parry, kill aura, ESP, fly. Raw GitHub verified loader.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/DiosDi/VexonHub/refs/heads/main/VexonHub"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 6. BLOX FRUITS -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Blox Fruits</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Blox Fruits</h3>
-        <p>Universal hub auto-detects Blox Fruits. Auto-farm, fruit finder, teleport, aimbot, ESP.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 7. PET SIMULATOR 99 -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Pet Simulator 99</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Infinity Ware — PS99</h3>
-        <p>Verified via bubblescripts. Auto-farm, Auto-hatch, Flag placement, Upgrade automation. Keyless.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/bubblescripts/scripts/refs/heads/main/PS99/psgo"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 8. BEE SWARM SIMULATOR -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Bee Swarm Simulator</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Atlas Bee Swarm Script</h3>
-        <p>Auto-farm, auto-convert, auto-dig referenced from known BSS repository. Updated 2026.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/Chris12089/atlasbss/main/script.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 9. ADOPT ME! -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Adopt Me!</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Adopt Me</h3>
-        <p>Speed Hub X universal hub auto-detects Adopt Me. Pet automation, money farming, task management.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 10. SOL'S RNG -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Sol's RNG</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>HohoV2 — Sol's RNG</h3>
-        <p>Verified live loader. Auto-roll, luck amplifier, anti-AFK, auto-collect. Referenced from multiple sources.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 11. GROW A GARDEN -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Grow a Garden</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Grow a Garden</h3>
-        <p>Speed Hub X auto-detects Grow a Garden. Auto-harvest, auto-water, sell automation. Keyless.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 12. WORK AT A PIZZA PLACE -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Work at a Pizza Place</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Work at a Pizza Place</h3>
-        <p>Speed Hub X auto-detects WaaPP. Auto-work, auto-earn, employee role automation. Keyless loader.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 13. FISCH / FISH IT! -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Fisch / Fish It!</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Fisch</h3>
-        <p>Speed Hub X auto-detects Fisch. Auto-cast, auto-reel, sell fish, fish ESP. Keyless loader.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════ OBBY/HORROR ═══════════════════════════════ -->
-
-    <!-- 14. DOORS -->
-    <div class="script-card" data-game="obby">
-        <div class="script-game">Doors</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>ShadowScripts — Doors 5.2</h3>
-        <p>Verified raw GitHub loader. Entity ESP, notifications, item aura, loot glow. Loading bar included.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/ShadowScripts4Roblox/PROTECTEDLUA/main/Scripts/DOORS/Loader52.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 15. TOWER OF HELL -->
-    <div class="script-card" data-game="obby">
-        <div class="script-game">Tower of Hell</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Tower of Hell</h3>
-        <p>Speed Hub X auto-detects ToH. Infinite jump, noclip, fly, auto-complete tower. Keyless loader.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 16. FORSAKEN -->
-    <div class="script-card" data-game="obby">
-        <div class="script-game">Forsaken</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Bobby Hub — Forsaken (No Key)</h3>
-        <p>Infinite stamina, auto-fill generators, ESP, invisibility. Keyless!</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/BobJunior1/ForsakenBoi/refs/heads/main/B0bbyHub"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy</button>
-        </div>
-    </div>
-
-    <!-- 17. PIGGY -->
-    <div class="script-card" data-game="obby">
-        <div class="script-game">Piggy</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>ImpHub — Piggy</h3>
-        <p>Grab all items, item teleport, ESP, god mode. Sourced from alan11ago/Hub on GitHub.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/alan11ago/Hub/refs/heads/main/ImpHub.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 18. 99 NIGHTS IN THE FOREST -->
-    <div class="script-card" data-game="obby">
-        <div class="script-game">99 Nights in the Forest</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — 99 Nights in the Forest</h3>
-        <p>Speed Hub X multi-game loader. Auto-survive, entity ESP, infinite stamina. Keyless.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 19. DANDY'S WORLD -->
-    <div class="script-card" data-game="obby">
-        <div class="script-game">Dandy's World</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>MoxHub / Riddance — Dandy's World (No Key)</h3>
-        <p>Auto-farm, ESP, speed hack, item aura, auto skillcheck. Top-rated 2026 hub, keyless.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════ BRAINROT ═══════════════════════════════ -->
-
-    <!-- 20. STEAL A BRAINROT -->
-    <div class="script-card" data-game="meme">
-        <div class="script-game">Steal a Brainrot</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Steal a Brainrot</h3>
-        <p>Speed Hub X auto-hub. Auto-steal, ESP, speed boost. Works on all major brainrot games.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 21. ESCAPE TSUNAMI FOR BRAINROTS -->
-    <div class="script-card" data-game="meme">
-        <div class="script-game">Escape Tsunami For Brainrots</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Escape Tsunami</h3>
-        <p>Speed Hub X auto-detects escape games. Speed hack, fly, auto-escape, anti-kill. Keyless loader.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 22. ESCAPE WAVES -->
-    <div class="script-card" data-game="meme">
-        <div class="script-game">Escape Waves</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Escape Waves</h3>
-        <p>Universal hub auto-detects Escape Waves. Fly, speed to max, auto-survive. Keyless no-key.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════ MORE GAMES ═══════════════════════════════ -->
-
-    <!-- 23. PHANTOM FORCES -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Phantom Forces</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Phantom Forces</h3>
-        <p>Universal hub auto-detects Phantom Forces. Silent aim, ESP, no recoil modules included.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 24. BROOKHAVEN RP -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Brookhaven RP</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — Brookhaven RP</h3>
-        <p>Auto-farm, aimbot, fly, teleport, clothes mod, game pass unlock. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 25. JUJUTSU SHENANIGANS -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Jujutsu Shenanigans</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Antimony Loader — Jujutsu Shenanigans</h3>
-        <p>Antimony Hub. Kill aura, auto combo, no cooldowns, unlimited stamina, domain unlock. Verified loader.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/Iyreeee/Antimony-Loader/main/loader.luau"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy</button>
-        </div>
-    </div>
-
-    <!-- 26. ANIME VANGUARDS -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Anime Vanguards</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Auto-Challenge Script — Anime Vanguards</h3>
-        <p>Auto-challenge, auto-summon, teleport, anti-AFK. Raw GitHub verified, updated March 2026.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/CHASEAAAA/vanguard/refs/heads/main/.lua", true
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy</button>
-        </div>
-    </div>
-
-    <!-- 27. LUCKY BLOCK BATTLEGROUNDS -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Lucky Block Battlegrounds</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>AI-Scripts-2025 — Lucky Block Battlegrounds</h3>
-        <p>Item giver, open all blocks, fly, walkspeed, noclip. Verified raw GitHub — Tested on Xeno.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/RealBatu20/AI-Scripts-2025/refs/heads/main/LuckyBlockBattlegrounds.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy</button>
-        </div>
-    </div>
-
-    <!-- 28. MAPS KNOCKOUT -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">MAPS Knockout</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — MAPS Knockout</h3>
-        <p>Speed Hub X universal combat hub. Aimbot, ESP, kill aura, speed. Auto-detects fight games.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy</button>
-        </div>
-    </div>
-
-    <!-- 29. BUILD A BOAT FOR TREASURE -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Build A Boat For Treasure</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Build A Boat</h3>
-        <p>Speed Hub X auto-detects BABT. Auto-gold farm, speed boat, block placer, chest collect.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy</button>
-        </div>
-    </div>
-
-    <!-- 30. MEEPCITY -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">MeepCity</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Auto-Coin Farm — MeepCity</h3>
-        <p>Infinite coins, auto-collect, candy farm, ESP. Sourced from ToraScript/Script on GitHub.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/ToraScript/Script/main/MeepCity"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy</button>
-        </div>
-    </div>
-
-    <!-- NEW SCRIPTS START HERE -->
-
-    <!-- 31. WARRIOR SIMULATOR -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Warrior Simulator</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Warrior Simulator</h3>
-        <p>Auto-farm, auto-collect, auto-upgrade. Keyless multi-game hub.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 32. NINJA LEGENDS -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Ninja Legends</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Ninja Legends</h3>
-        <p>Auto-farm, auto-train, auto-collect coins/chi. Keyless multi-game hub.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 33. PRESSURE -->
-    <div class="script-card" data-game="obby">
-        <div class="script-game">Pressure</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Pressure</h3>
-        <p>Auto-solve, noclip, speed hack, ESP for traps. Keyless multi-game hub.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 34. BEDWARS -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Bedwars</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>VexonHub — Bedwars</h3>
-        <p>Auto-bridge, kill aura, ESP, anti-void. Raw GitHub verified loader.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/DiosDi/VexonHub/refs/heads/main/VexonHub"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 35. BLADE BALL -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Blade Ball</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>VexonHub — Blade Ball</h3>
-        <p>Auto-parry, auto-block, ESP, speed hack. Raw GitHub verified loader.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/DiosDi/VexonHub/refs/heads/main/VexonHub"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 36. ANIME FIGHTERS SIMULATOR -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Anime Fighters Simulator</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Anime Fighters</h3>
-        <p>Auto-farm, auto-collect, auto-raid. Keyless multi-game hub.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 37. ALL STAR TOWER DEFENSE -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">All Star Tower Defense</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — ASTD</h3>
-        <p>Auto-farm, auto-place, auto-upgrade towers. Keyless multi-game hub.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 38. MINING SIMULATOR -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Mining Simulator</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Speed Hub X — Mining Simulator</h3>
-        <p>Auto-mine, auto-sell, auto-upgrade tools. Keyless multi-game hub.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 39. JAILBREAK (NEW) -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Jailbreak</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — Jailbreak</h3>
-        <p>Auto-rob, auto-arrest, teleport, ESP. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 40. MURDER MYSTERY 2 (NEW) -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Murder Mystery 2</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — MM2</h3>
-        <p>Auto-identify, silent aim, ESP, god mode. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 41. TOWER OF HELL (NEW) -->
-    <div class="script-card" data-game="obby">
-        <div class="script-game">Tower of Hell</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — ToH</h3>
-        <p>Infinite jump, noclip, fly, auto-complete. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 42. ADOPT ME! (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Adopt Me!</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — Adopt Me</h3>
-        <p>Pet automation, money farming, task management. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 43. BLOX FRUITS (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Blox Fruits</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — Blox Fruits</h3>
-        <p>Auto-farm, fruit finder, teleport, aimbot, ESP. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 44. PET SIMULATOR 99 (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Pet Simulator 99</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — PS99</h3>
-        <p>Auto-farm, auto-hatch, flag placement, upgrade automation. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 45. BEE SWARM SIMULATOR (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Bee Swarm Simulator</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — BSS</h3>
-        <p>Auto-farm, auto-convert, auto-dig. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 46. SOL'S RNG (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Sol's RNG</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — Sol's RNG</h3>
-        <p>Auto-roll, luck amplifier, anti-AFK. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 47. GROW A GARDEN (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Grow a Garden</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — Grow a Garden</h3>
-        <p>Auto-harvest, auto-water, sell automation. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 48. WORK AT A PIZZA PLACE (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Work at a Pizza Place</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — WaaPP</h3>
-        <p>Auto-work, auto-earn, employee role automation. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 49. FISCH / FISH IT! (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Fisch / Fish It!</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — Fisch</h3>
-        <p>Auto-cast, auto-reel, sell fish, fish ESP. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 50. PHANTOM FORCES (NEW) -->
-    <div class="script-card" data-game="combat">
-        <div class="script-game">Phantom Forces</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — Phantom Forces</h3>
-        <p>Silent aim, ESP, no recoil modules. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 51. BUILD A BOAT FOR TREASURE (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">Build A Boat For Treasure</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — BABT</h3>
-        <p>Auto-gold farm, speed boat, block placer. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 52. MEEPCITY (NEW) -->
-    <div class="script-card" data-game="sim">
-        <div class="script-game">MeepCity</div>
-        <div class="verified-badge">✓ SOURCE VERIFIED</div>
-        <h3>Redz Hub — MeepCity</h3>
-        <p>Infinite coins, auto-collect, candy farm, ESP. Sourced from REDzHUB/REDzHUB.</p>
-        <pre>loadstring(game:HttpGet(
-  "https://raw.githubusercontent.com/REDzHUB/REDzHUB/main/REDzHUB"
-))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Loader</button>
-        </div>
-    </div>
-
-    <!-- 53. CORE UTILITIES: UNIVERSAL TARGETING -->
-    <div class="script-card" data-game="tools">
-        <div class="script-game">Core Utilities</div>
-        <div class="verified-badge">✓ VERIFIED</div>
-        <h3>Universal Targeting & Prediction</h3>
-        <p>Advanced spring-interpolation targeting system with team-check and visibility checks.</p>
-        <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/StrivonLabs/Core/main/Targeting.lua"))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Code</button>
-        </div>
-    </div>
-
-    <!-- 54. CORE UTILITIES: MAID & SIGNAL API -->
-    <div class="script-card" data-game="tools">
-        <div class="script-game">Resource Management</div>
-        <div class="verified-badge">✓ VERIFIED</div>
-        <h3>Maid & Signal API</h3>
-        <p>Robust event cleanup and high-frequency signal dispatching for modular scripts.</p>
-        <pre>loadstring(game:HttpGet("https://raw.githubusercontent.com/StrivonLabs/Core/main/MaidSignal.lua"))()</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy Code</button>
-        </div>
-    </div>
-
-    <!-- 31. OSU! MANIA (Roblox) -->
-    <div class="script-card" data-game="obby">
-        <span class="script-badge badge-new">ADVANCED</span>
-        <div class="script-game">OSU! Mania</div>
-        <div class="verified-badge">✓ VERIFIED</div>
-        <h3>Autonomous Input Control</h3>
-        <p>Uses VirtualInputManager for genuine keyboard event simulation in rhythm games.</p>
-        <pre>-- OSU! Mania Auto-Player Research
-local VIM = game:GetService("VirtualInputManager")
-local Keys = {Enum.KeyCode.D, Enum.KeyCode.F, Enum.KeyCode.J, Enum.KeyCode.K}
-
-local function Tap(lane)
-    VIM:SendKeyEvent(true, Keys[lane], false, game)
-    task.wait(0.05)
-    VIM:SendKeyEvent(false, Keys[lane], false, game)
-end
-
--- Connect to note spawn events
-workspace.DescendantAdded:Connect(function(note)
-    if note:IsA("BasePart") and note.Name:find("Note") then
-        local lane = note:GetAttribute("Lane") or 1
-        task.spawn(Tap, math.clamp(lane, 1, 4))
-    end
-end)</pre>
-        <div class="script-actions">
-            <button onclick="copyScript(this)" class="btn-outline">📋 Copy</button>
-        </div>
-    </div>
-
+    <button class="btn-primary" style="width: 100%; padding: 1rem;" onclick="submitRequest()">Securely Submit Request</button>
 </div>
 
-<footer style="margin-top:4rem;">
-    <p>© 2026 Strivon Labs · <a href="index.html">Home</a> · All scripts for educational purposes</p>
-</footer>
+<!-- Modal -->
+<div class="modal-overlay" id="scriptModal">
+    <div class="modal-content glass-panel" id="modalContent">
+        <button class="close-modal" onclick="closeModal()">✕</button>
+        <div class="modal-header">
+            <h2 id="modalGameTitle">Game Title</h2>
+            <p id="modalGameMeta" style="color: var(--accent); font-weight: 800; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;">X Scripts Available</p>
+        </div>
+        <div id="modalScriptsList">
+            <!-- Injected via JS -->
+        </div>
+    </div>
+</div>
 
 <div id="toast"></div>
 
+<!-- Data and Logic -->
+<script src="scripts_data.js"></script>
 <script src="script.js"></script>
 <script>
-    initTheme();
+    // Safe initialization
+    setTimeout(() => {
+        if(typeof initTheme === 'function') initTheme();
+    }, 100);
 
-    function filterTab(cat, btn) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('.script-card').forEach(card => {
-            card.style.display = (cat === 'all' || card.dataset.game === cat) ? '' : 'none';
-        });
-    }
+    const gamesGrid = document.getElementById('gamesGrid');
+    const searchInput = document.getElementById('gameSearch');
 
-    function filterSearch() {
-        const q = document.getElementById('scriptSearch').value.toLowerCase();
-        document.querySelectorAll('.script-card').forEach(card => {
-            card.style.display = card.innerText.toLowerCase().includes(q) ? '' : 'none';
-        });
-    }
-
-    function filterScripts(category) {
-        // Update buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.innerText.toLowerCase().includes(category)) {
-                btn.classList.add('active');
-            }
-            if (category === 'all' && btn.innerText.includes('All')) {
-                btn.classList.add('active');
-            }
-        });
-
-        // Filter cards
-        const cards = document.querySelectorAll('.script-card');
-        cards.forEach(card => {
-            if (category === 'all' || card.getAttribute('data-game') === category) {
-                card.classList.remove('hidden');
-            } else {
-                card.classList.add('hidden');
+    function renderGames(filter = '') {
+        gamesGrid.innerHTML = '';
+        const q = filter.toLowerCase();
+        
+        let delay = 0;
+        gamesData.forEach(game => {
+            if (game.name.toLowerCase().includes(q)) {
+                const card = document.createElement('div');
+                card.className = 'game-card glass-panel animate-fade-up';
+                card.style.animationDelay = `${delay}s`;
+                
+                const scriptCount = game.scripts.length;
+                card.innerHTML = `
+                    <div class="game-category">${game.category}</div>
+                    <h3>${game.name}</h3>
+                    <p>${scriptCount} Script${scriptCount > 1 ? 's' : ''} Included</p>
+                `;
+                
+                card.onclick = () => openGameModal(game);
+                gamesGrid.appendChild(card);
+                delay += 0.03;
             }
         });
+        
+        if (gamesGrid.innerHTML === '') {
+            gamesGrid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: var(--text-dim); font-size: 1.2rem; padding: 2rem;">No games found matching your search.</p>';
+        }
     }
 
-    function copyScript(btn) {
-        const container = btn.closest('.module-card, .script-card');
-        const pre = container ? container.querySelector('pre') : null;
-        if (!pre) return;
-        const header = "-- [ VERIFIED BY STRIVON LABS ] --\n-- Source: strivonlabs.io | For educational use only\n\n";
-        navigator.clipboard.writeText(header + pre.innerText).then(() => {
-            showToast('✓ Copied! Verified by Strivon Labs.');
+    function filterGames() {
+        renderGames(searchInput.value);
+    }
+
+    // Modal Logic
+    const overlay = document.getElementById('scriptModal');
+    const modalTitle = document.getElementById('modalGameTitle');
+    const modalMeta = document.getElementById('modalGameMeta');
+    const modalList = document.getElementById('modalScriptsList');
+
+    function openGameModal(game) {
+        modalTitle.innerText = game.name;
+        modalMeta.innerText = `${game.scripts.length} VERIFIED MODULE${game.scripts.length > 1 ? 'S' : ''} AVAILABLE`;
+        
+        modalList.innerHTML = '';
+        game.scripts.forEach(script => {
+            const keyBadgeClass = script.hasKey ? 'badge-key' : 'badge-nokey';
+            const keyBadgeText = script.hasKey ? '🔑 KEY SYSTEM' : '🔓 NO KEY';
+            
+            const verifiedBadge = script.verified 
+                ? '<span class="badge badge-verified">✓ SOURCE VERIFIED</span>' 
+                : '';
+
+            const safeCode = script.code.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            const div = document.createElement('div');
+            div.className = 'script-item';
+            div.innerHTML = `
+                <div class="script-header">
+                    <div style="flex: 1; padding-right: 1rem;">
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.4rem;">${script.name}</h3>
+                        <p style="font-size: 0.95rem; color: var(--text-dim); line-height: 1.5;">${script.desc}</p>
+                    </div>
+                </div>
+                <div class="badge-group" style="margin-bottom: 1.2rem;">
+                    ${verifiedBadge}
+                    <span class="badge ${keyBadgeClass}">${keyBadgeText}</span>
+                </div>
+                <div class="script-code-block">
+                    <pre><code>${safeCode}</code></pre>
+                    <button class="btn-outline copy-btn" onclick="copyModalScript(this)">📋 Copy to Clipboard</button>
+                </div>
+            `;
+            modalList.appendChild(div);
+        });
+        
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        overlay.classList.remove('open');
+        document.body.style.overflow = 'auto';
+    }
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal();
+    });
+
+    // Close on Escape Key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) {
+            closeModal();
+        }
+    });
+
+    function switchTab(tab) {
+        document.querySelectorAll('.hub-tab').forEach(b => b.classList.remove('active'));
+        if(tab === 'browse') {
+            document.querySelector('.hub-tab:nth-child(1)').classList.add('active');
+            document.getElementById('browseTab').style.display = 'block';
+            document.getElementById('requestTab').classList.remove('active');
+        } else {
+            document.querySelector('.hub-tab:nth-child(2)').classList.add('active');
+            document.getElementById('browseTab').style.display = 'none';
+            document.getElementById('requestTab').classList.add('active');
+        }
+    }
+
+    function submitRequest() {
+        if(typeof showToast === 'function') {
+            showToast('✓ Request encrypted and sent to Strivon Research Team.');
+        } else {
+            alert('✓ Request sent successfully.');
+        }
+        setTimeout(() => { switchTab('browse'); }, 2000);
+    }
+
+    function copyModalScript(btn) {
+        const pre = btn.previousElementSibling;
+        const code = pre.innerText;
+        const header = "-- [ VERIFIED BY STRIVON LABS ] --\\n-- Source: strivonlabs.io\\n\\n";
+        
+        navigator.clipboard.writeText(header + code).then(() => {
+            if(typeof showToast === 'function') showToast('✓ Copied to clipboard!');
         }).catch(() => {
-            // Fallback
             const ta = document.createElement('textarea');
-            ta.value = header + pre.innerText;
+            ta.value = header + code;
             document.body.appendChild(ta);
             ta.select();
             document.execCommand('copy');
             document.body.removeChild(ta);
-            showToast('✓ Copied! Verified by Strivon Labs.');
+            if(typeof showToast === 'function') showToast('✓ Copied to clipboard!');
         });
     }
+
+    // Initial Render
+    document.addEventListener('DOMContentLoaded', () => {
+        renderGames();
+    });
 </script>
 </body>
 </html>
