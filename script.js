@@ -130,8 +130,20 @@ function showToast(msg) {
 
 function goScripts() { window.location.href = "scripts.html"; }
 
-// Initialize
+// Initialization
 initTheme();
 if (document.getElementById('ramStat')) {
     setInterval(statusStats, 3000);
 }
+
+// Glassmorphism 2.0 - Mouse Glow
+document.addEventListener('mousemove', (e) => {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+    });
+});

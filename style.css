@@ -150,6 +150,41 @@ nav a:hover, nav a.active {
     color: var(--text-main);
 }
 
+/* LIVE STATUS */
+.status-bar {
+    display: flex;
+    gap: 2rem;
+    margin-top: 3rem;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-dim);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #10b981;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
 /* HERO SECTION */
 .hero {
     padding: 10rem 8% 6rem;
@@ -260,20 +295,38 @@ nav a:hover, nav a.active {
 
 .card {
     background: var(--bg-card);
-    backdrop-filter: blur(15px);
     border: 1px solid var(--border);
-    padding: 3.5rem 3rem;
-    border-radius: 28px;
-    transition: var(--transition);
+    border-radius: 12px;
+    padding: 2rem;
     position: relative;
     overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: var(--mouse-y, 0);
+    left: var(--mouse-x, 0);
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(var(--accent-rgb), 0.15) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+
+.card:hover::before {
+    opacity: 1;
 }
 
 .card:hover {
-    transform: translateY(-15px);
-    border-color: rgba(var(--accent-rgb), 0.5);
-    box-shadow: 0 40px 80px rgba(0,0,0,0.5), var(--glow);
-    background: rgba(var(--accent-rgb), 0.03);
+    border-color: var(--accent);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(var(--accent-rgb), 0.1);
 }
 
 .card h3 {

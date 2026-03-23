@@ -851,5 +851,31 @@ const gamesData = [
                 "verified": true
             }
         ]
+    },
+    {
+        "name": "Combat Warriors",
+        "category": "combat",
+        "scripts": [
+            {
+                "name": "Combat Warriors Infinite Stamina",
+                "desc": "Infinite Stamina, Aura, and Reach for optimized melee combat.",
+                "code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/StrivonLabs/Scripts/main/CombatWarriors.lua'))()",
+                "hasKey": false,
+                "verified": true
+            }
+        ]
+    },
+    {
+        "name": "Brookhaven",
+        "category": "rp",
+        "scripts": [
+            {
+                "name": "Brookhaven Gamepass Unlocker",
+                "desc": "Unlock all gamepasses, speed, and character customization.",
+                "code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/StrivonLabs/Scripts/main/Brookhaven.lua'))()",
+                "hasKey": false,
+                "verified": true
+            }
+        ]
     }
 ];

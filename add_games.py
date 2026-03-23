@@ -117,6 +117,24 @@ new_scripts = [
         "verified": True
     },
     {
+        "category": "combat",
+        "game": "Combat Warriors",
+        "name": "Combat Warriors Infinite Stamina",
+        "desc": "Infinite Stamina, Aura, and Reach for optimized melee combat.",
+        "code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/StrivonLabs/Scripts/main/CombatWarriors.lua'))()",
+        "hasKey": False,
+        "verified": True
+    },
+    {
+        "category": "rp",
+        "game": "Brookhaven",
+        "name": "Brookhaven Gamepass Unlocker",
+        "desc": "Unlock all gamepasses, speed, and character customization.",
+        "code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/StrivonLabs/Scripts/main/Brookhaven.lua'))()",
+        "hasKey": False,
+        "verified": True
+    },
+    {
         "category": "rp",
         "game": "Murder Mystery 2",
         "name": "MM2 Sheriff ESP",

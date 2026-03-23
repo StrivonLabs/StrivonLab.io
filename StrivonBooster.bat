@@ -1,15 +1,20 @@
 @echo off
-title STRIVON BOOSTER - Ultimate Performance Alpha
+title STRIVON BOOSTER - V4 FLAGSHIP ALPHA
 color 0b
+mode con: cols=90 lines=30
 
 echo.
-echo    .oooooo..o oooooooooooo oooooooooo.  ooooo ooooooo..o  .oooooo.   ooooo      ooo 
-echo   d8P'    `Y8 `888'     `8 `888'   `Y8b `888' d8P'    `Y8 d8P'  `Y8b  `888b.     `8' 
-echo   Y88bo.       888          888      888 888  Y88bo.     888      888  8 `88b.    8  
-echo    `"Y8888o.   888oooo8     888      888 888   `"Y8888o. 888      888  8   `88b.  8  
-echo        `"Y88b  888    "     888      888 888       `"Y88b 888      888  8     `88b.8  
-echo   oo     .d8P  888       o  888     d88' 888  oo     .d8P 88b.  .d8P  8       `8888  
-echo   8""88888P'  o888ooooood8 o888bood8P'  o888o 8""88888P'   `Y8bood8P'  o8          8  
+echo    :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ::
+echo    ::                                                                 ::
+echo    ::   .oooooo..o oooooooooooo oooooooooo.  ooooo ooooooo..o  .oo    ::
+echo    ::  d8P'    `Y8 `888'     `8 `888'   `Y8b `888' d8P'    `Y8 d8P    ::
+echo    ::  Y88bo.       888          888      888 888  Y88bo.     888     ::
+echo    ::   `"Y8888o.   888oooo8     888      888 888   `"Y8888o. 888     ::
+echo    ::       `"Y88b  888    "     888      888 888       `"Y88b 888    ::
+echo    ::  oo     .d8P  888       o  888     d88' 888  oo     .d8P 88b    ::
+echo    ::  8""88888P'  o888ooooood8 o888bood8P'  o888o 8""88888P'   `Y8   ::
+echo    ::                                                                 ::
+echo    :: . . . . . . . . [ STRIVON LABS - PREMIUM ] . . . . . . . . . . ::
 echo.
 echo ======================================================================================
 echo    STRIVON BOOSTER - SYSTEM OPTIMIZER [v4.0 ALPHA]
