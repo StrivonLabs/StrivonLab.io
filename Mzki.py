@@ -67,7 +67,7 @@ class MzkiApp(ctk.CTk):
         self.logo_text = ctk.CTkLabel(
             self.logo_frame, 
             text="MZKI V4", 
-            font=ctk.CTkFont(family="Inter", size=20, weight="bold", letter_spacing=2),
+            font=ctk.CTkFont(family="Inter", size=20, weight="bold"),
             text_color=TEXT_COLOR
         )
         self.logo_text.pack(side="left", padx=(10, 0))
