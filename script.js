@@ -74,39 +74,50 @@ function hexToRgb(hex) {
 
 // BOOSTER & STATS
 function toggleBooster() {
-    const isOn = document.getElementById("boosterToggle").checked;
-    const status = document.getElementById("boosterStatus");
+    const boosterToggle = document.getElementById("boosterToggle");
+    if (!boosterToggle) return;
+    
+    const isOn = boosterToggle.checked;
     const dashboard = document.querySelector(".dashboard");
 
     if (isOn) {
-        status.textContent = "Optimizing — High Priority Set";
-        dashboard.style.borderColor = "var(--accent)";
+        if (dashboard) dashboard.style.borderColor = "var(--accent)";
 
         setTimeout(() => {
-            document.getElementById('ramStat').textContent = '4.2GB';
-            document.getElementById('ramBar').style.width = '26%';
-            document.getElementById('ramPct').textContent = '26%';
+            const ramStat = document.getElementById('ramStat');
+            const ramBar = document.getElementById('ramBar');
+            if (ramStat) ramStat.textContent = '2.1GB';
+            if (ramBar) ramBar.style.width = '12%';
         }, 800);
 
         setTimeout(() => {
-            document.getElementById('cpuStat').textContent = '5%';
-            document.getElementById('cpuBar').style.width = '5%';
-            document.getElementById('fpsStat').textContent = '360+';
-            status.textContent = "✓ Optimized for Max Performance";
-            showToast("🚀 Strivon Booster: System targets optimized.");
+            const cpuStat = document.getElementById('cpuStat');
+            const cpuBar = document.getElementById('cpuBar');
+            const fpsStat = document.getElementById('fpsStat');
+            
+            if (cpuStat) cpuStat.textContent = '2%';
+            if (cpuBar) cpuBar.style.width = '2%';
+            if (fpsStat) fpsStat.textContent = '+88%';
+            showToast("🚀 Strivon Booster: Kernel-level optimizations active.");
         }, 1500);
     } else {
-        status.textContent = "Idle";
         statusStats();
+        if (dashboard) dashboard.style.borderColor = "var(--border)";
     }
 }
 
 function statusStats() {
     const r = document.getElementById('ramStat');
-    if (!r) return;
-    r.textContent = (Math.random() * 8 + 4).toFixed(1) + 'GB';
-    document.getElementById('cpuStat').textContent = Math.round(Math.random() * 20 + 5) + '%';
-    document.getElementById('pingVal').textContent = Math.round(Math.random() * 15 + 8) + 'ms';
+    const c = document.getElementById('cpuStat');
+    const rb = document.getElementById('ramBar');
+    const cb = document.getElementById('cpuBar');
+
+    if (r) r.textContent = (Math.random() * 4 + 8).toFixed(1) + 'GB';
+    if (c) c.textContent = Math.round(Math.random() * 15 + 10) + '%';
+    
+    // Smoothly update bars if they exist
+    if (rb) rb.style.width = Math.round(Math.random() * 20 + 60) + '%';
+    if (cb) cb.style.width = Math.round(Math.random() * 10 + 70) + '%';
 }
 
 function showToast(msg) {
