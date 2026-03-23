@@ -799,5 +799,57 @@ const gamesData = [
                 "verified": true
             }
         ]
+    },
+    {
+        "name": "Bloop Fruits",
+        "category": "rpg",
+        "scripts": [
+            {
+                "name": "Bloop Fruits Absolute Hub",
+                "desc": "Auto max level, auto chest, devil fruit sniper, sea event farmer.",
+                "code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/BloxScripts/BloopHub/main/source.lua'))()",
+                "hasKey": true,
+                "verified": true
+            }
+        ]
+    },
+    {
+        "name": "Build A Boat",
+        "category": "sim",
+        "scripts": [
+            {
+                "name": "Auto Win Build A Boat",
+                "desc": "Teleport to end instantly, auto farm gold blocks.",
+                "code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/BaBHub/AutoWin/main/script.lua'))()",
+                "hasKey": false,
+                "verified": true
+            }
+        ]
+    },
+    {
+        "name": "Lumber Tycoon 2",
+        "category": "sim",
+        "scripts": [
+            {
+                "name": "LT2 Wood Dupe",
+                "desc": "Dupe money, auto bring wood, teleport all axes.",
+                "code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/LumberScripts/Tycoon/main/dupe.lua'))()",
+                "hasKey": true,
+                "verified": true
+            }
+        ]
+    },
+    {
+        "name": "Grand Piece Online",
+        "category": "combat",
+        "scripts": [
+            {
+                "name": "GPO Dungeon Farmer",
+                "desc": "Auto block, fast attack, auto dungeon completion.",
+                "code": "loadstring(game:HttpGet('https://raw.githubusercontent.com/GPOHub/Farmer/main/dungeon.lua'))()",
+                "hasKey": true,
+                "verified": true
+            }
+        ]
     }
 ];
