@@ -215,49 +215,62 @@ class MzkiApp(ctk.CTk):
         self.status_container.configure(fg_color="rgba(59, 130, 246, 0.1)")
         self.update()
 
+        # Potential Roblox process names
+        ROBLOX_NAMES = ["RobloxPlayerBeta.exe", "WindowsPlayerBeta.exe", "RobloxPlayerLauncher.exe", "RobloxPlayer.exe"]
+        
         target_pid = None
-        for proc in psutil.process_iter(['name', 'pid']):
-            try:
-                if proc.info['name'] == 'RobloxPlayerBeta.exe':
-                    target_pid = proc.info['pid']
-                    break
-            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                pass
+        try:
+            for proc in psutil.process_iter(['name', 'pid']):
+                try:
+                    if any(name.lower() in proc.info['name'].lower() for name in ROBLOX_NAMES):
+                        target_pid = proc.info['pid']
+                        found_name = proc.info['name']
+                        break
+                except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                    pass
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to scan processes:\n{e}")
+            return
         
         if not target_pid:
-            self.status_label.configure(text="Status: Target Not Found", text_color="#ef4444")
+            self.status_label.configure(text="Status: Roblox Not Found", text_color="#ef4444")
             self.status_container.configure(fg_color="rgba(239, 68, 68, 0.1)")
-            messagebox.showwarning("Not Found", "Please open Roblox before attaching.")
+            messagebox.showwarning("Not Found", "Please open Roblox before attaching.\n(Looked for Web & App versions)")
             return
 
-        self.status_label.configure(text=f"Status: Attaching to {target_pid}...", text_color=ACCENT_SECONDARY)
+        self.status_label.configure(text=f"Status: Found {found_name} ({target_pid})", text_color=ACCENT_SECONDARY)
         self.update()
 
         # Check for Bin folder (we copy it alongside the program)
         bundle_dir = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
         injector_path = os.path.join(bundle_dir, "Bin", "erto3e4rortoergn.exe")
         
-        # Fallback to current working directory in case it's placed outside _MEIPASS
+        # Fallback to current working directory
         if not os.path.exists(injector_path):
             injector_path = os.path.join(os.getcwd(), "Bin", "erto3e4rortoergn.exe")
 
         if not os.path.exists(injector_path):
             self.status_label.configure(text="Status: Dependency missing", text_color="#ef4444")
             self.status_container.configure(fg_color="rgba(239, 68, 68, 0.1)")
-            messagebox.showerror("File Not Found", f"Could not find injector at:\n{injector_path}\nPlease make sure the Bin folder is next to Mzki.")
+            messagebox.showerror("File Not Found", f"Could not find injector at:\n{injector_path}\nPlease ensure the 'Bin' folder is in the same directory as Mzki.")
             return
 
         try:
             # Run silently
-            subprocess.run(
+            res = subprocess.run(
                 [injector_path, str(target_pid)],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                creationflags=0x08000000  # CREATE_NO_WINDOW
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                creationflags=0x08000000,  # CREATE_NO_WINDOW
+                timeout=10 # Add timeout to prevent hanging
             )
             self.attached_pid = target_pid
             self.status_label.configure(text=f"Status: Attached ✅ ({self.attached_pid})", text_color="#10b981")
             self.status_container.configure(fg_color="rgba(16, 185, 129, 0.1)")
+        except subprocess.TimeoutExpired:
+            self.status_label.configure(text="Status: Injector Timed Out", text_color="#ef4444")
+            self.status_container.configure(fg_color="rgba(239, 68, 68, 0.1)")
+            messagebox.showerror("Timeout", "The injector process timed out. Try running as administrator.")
         except Exception as e:
             self.status_label.configure(text="Status: Attach Failed", text_color="#ef4444")
             self.status_container.configure(fg_color="rgba(239, 68, 68, 0.1)")
